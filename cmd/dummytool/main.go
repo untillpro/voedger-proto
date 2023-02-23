@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "embed"
-	"fmt"
+	// "fmt"
 	"net"
 	"os"
 	"strings"
@@ -25,7 +25,7 @@ var version string
 
 func main() {
 	if err := execute(os.Args, version); err != nil {
-		fmt.Println("Error:", err)
+		// fmt.Println("Error:", err)
 		os.Exit(1)
 	}
 }

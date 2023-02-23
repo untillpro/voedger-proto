@@ -70,6 +70,8 @@ func SilentExecute(execute func(args []string, version string) error, args []str
 	}()
 
 	err = execute(args, version)
+	stderrWriter.Close()
+	stderrReader.Close()
 	wg.Wait()
 	return
 

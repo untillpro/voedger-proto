@@ -8,7 +8,7 @@ import (
 
 func newDeployCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "deploy [IP or Domain:IP] [IP or Domain:IP] [IP or Domain:IP] [IP or Domain:IP] [IP or Domain:IP]",
+		Use:   "deploy {[<domain>:]<ipaddr>}",
 		Short: "Deploy command deploys a cluster using specified nodes",
 		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) error {
