@@ -12,9 +12,9 @@ func newDeployCmd() *cobra.Command {
 		Short: "Deploy command deploys a cluster using specified nodes",
 		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			for _, arg := range args {
+			for idx, arg := range args {
 				if !isValidAddress(arg) {
-					return fmt.Errorf("invalid argument - %s\nPlease provide arguments in the format - IP or Domain:IP", arg)
+					return fmt.Errorf("%w: argument #%v: %v", ErrDeployInvalidArg, idx, arg)
 				}
 			}
 			// TODO: Implement the deploy functionality using appCompose and dbCompose

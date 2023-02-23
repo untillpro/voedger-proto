@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/voedger/voedger/pkg/ibus"
+	"voedger.io/voedger/pkg/ibus"
 )
 
 func Benchmark_QueryAndSend(b *testing.B) {

@@ -16,8 +16,8 @@ import (
 	"time"
 
 	logger "github.com/heeus/core-logger"
-	"github.com/voedger/voedger/pkg/ibus"
 	"github.com/stretchr/testify/require"
+	"voedger.io/voedger/pkg/ibus"
 )
 
 func Test_BasicUsage_RegisterReceivers_QuerySender(t *testing.T) {

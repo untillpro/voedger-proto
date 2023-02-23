@@ -1,5 +1,8 @@
 package main
 
+import "errors"
+
+// nolint
 var (
-	ErrDeployInvalidArg = "invalid argument. Please provide arguments in the format - IP or Domain:IP"
+	ErrDeployInvalidArg = errors.New("invalid argument, use IP or Domain:IP")
 )

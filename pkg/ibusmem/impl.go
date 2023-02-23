@@ -12,8 +12,8 @@ import (
 	"time"
 
 	logger "github.com/heeus/core-logger"
-	"github.com/voedger/voedger/pkg/ibus"
-	coreutils "github.com/voedger/voedger/pkg/utils"
+	"voedger.io/voedger/pkg/utils"
+	"voedger.io/voedger/pkg/ibus"
 )
 
 type bus struct {

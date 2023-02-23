@@ -1,4 +1,4 @@
-module github.com/voedger/voedger
+module voedger.io/voedger
 
 go 1.20
 

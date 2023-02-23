@@ -10,7 +10,7 @@ import (
 	"time"
 
 	logger "github.com/heeus/core-logger"
-	"github.com/voedger/voedger/pkg/ibus"
+	"voedger.io/voedger/pkg/ibus"
 )
 
 func New(params ibus.CLIParams) (impl ibus.IBus, cleanup func()) {

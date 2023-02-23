@@ -17,17 +17,14 @@ func isValidAddress(address string) bool {
 		return false
 	}
 	ip := net.ParseIP(parts[1])
-	if ip == nil {
-		return false
-	}
-	return true
+	return !(ip == nil)
 }
 
 //go:embed version
 var version string
 
 func main() {
-	if err := execute(os.Args[1:], version); err != nil {
+	if err := execute(os.Args, version); err != nil {
 		fmt.Println("Error:", err)
 		os.Exit(1)
 	}
@@ -42,7 +39,7 @@ func execute(args []string, ver string) error {
 		Short: "Cluster management utility written in golang",
 	}
 
-	rootCmd.SetArgs(args)
+	rootCmd.SetArgs(args[1:])
 	rootCmd.AddCommand(newDeployCmd(), newUpgradeCmd())
 	return rootCmd.Execute()
 }
