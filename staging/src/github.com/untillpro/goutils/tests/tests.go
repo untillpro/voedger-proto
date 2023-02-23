@@ -26,6 +26,8 @@ func CheckError(t *testing.T, expectedErr error, expectedErrPattern string, actu
 	}
 }
 
+// https://go.dev/play/p/Fzj1k7jul7z
+
 func SilentExecute(execute func(args []string, version string) error, args []string, version string) (stdout string, stderr string, err error) {
 
 	stdoutReader, stdoutWriter, err := os.Pipe()
