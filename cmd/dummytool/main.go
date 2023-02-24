@@ -2,44 +2,29 @@ package main
 
 import (
 	_ "embed"
+
 	// "fmt"
-	"net"
 	"os"
-	"strings"
 
-	"github.com/spf13/cobra"
+	"github.com/untillpro/goutils/cobrau"
 )
-
-func isValidAddress(address string) bool {
-	// Address should be in the format of IP or Domain:IP
-	parts := strings.Split(address, ":")
-	if len(parts) != 2 {
-		return false
-	}
-	ip := net.ParseIP(parts[1])
-	return !(ip == nil)
-}
 
 //go:embed version
 var version string
 
+var verbose bool
+
 func main() {
-	if err := execute(os.Args, version); err != nil {
-		// fmt.Println("Error:", err)
+	if err := rootCmd(os.Args, version); err != nil {
 		os.Exit(1)
 	}
 }
 
-func execute(args []string, ver string) error {
-
-	version = ver
-
-	var rootCmd = &cobra.Command{
-		Use:   "ctool",
-		Short: "Cluster management utility written in golang",
-	}
-
-	rootCmd.SetArgs(args[1:])
-	rootCmd.AddCommand(newDeployCmd(), newUpgradeCmd())
-	return rootCmd.Execute()
+func rootCmd(args []string, ver string) error {
+	return cobrau.PrepareAndExecuteRootCmd(
+		"ctool",
+		"Cluster management utility",
+		args, &version, &verbose,
+		newDeployCmd(), newUpgradeCmd(),
+	)
 }

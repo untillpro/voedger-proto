@@ -1,4 +1,9 @@
-package tests
+/*
+* Copyright (c) 2023-present unTill Pro, Ltd.
+* @author Maxim Geraskin
+ */
+
+package testingu
 
 import (
 	"bytes"
@@ -10,7 +15,30 @@ import (
 	"testing"
 )
 
-func CheckError(t *testing.T, expectedErr error, expectedErrPattern string, actualErr error) {
+type RootTestCase struct {
+	Name               string
+	Args               []string
+	Version            string
+	ExpectedErr        error
+	ExpectedErrPattern string
+}
+
+func RunRootTestCases(t *testing.T, execute func(args []string, version string) error, testCases []RootTestCase) {
+	for _, tc := range testCases {
+		t.Run(tc.Name, func(t *testing.T) {
+
+			f := func() error {
+				return execute(tc.Args, tc.Version)
+			}
+
+			_, _, err := captureStdoutStderr(f)
+
+			checkError(t, tc.ExpectedErr, tc.ExpectedErrPattern, err)
+		})
+	}
+}
+
+func checkError(t *testing.T, expectedErr error, expectedErrPattern string, actualErr error) {
 	if expectedErr != nil || len(expectedErrPattern) > 0 {
 		if actualErr == nil {
 			t.Errorf("error was not returned as expected")
@@ -28,7 +56,7 @@ func CheckError(t *testing.T, expectedErr error, expectedErrPattern string, actu
 
 // https://go.dev/play/p/Fzj1k7jul7z
 
-func SilentExecute(execute func(args []string, version string) error, args []string, version string) (stdout string, stderr string, err error) {
+func captureStdoutStderr(f func() error) (stdout string, stderr string, err error) {
 
 	stdoutReader, stdoutWriter, err := os.Pipe()
 	if err != nil {
@@ -56,24 +84,20 @@ func SilentExecute(execute func(args []string, version string) error, args []str
 	go func() {
 		var b bytes.Buffer
 		defer wg.Done()
-		if _, err := io.Copy(&b, stdoutReader); err != nil {
-			return
-		}
+		_, _ = io.Copy(&b, stdoutReader)
 		stdout = b.String()
 	}()
 	wg.Add(1)
 	go func() {
 		var b bytes.Buffer
 		defer wg.Done()
-		if _, err := io.Copy(&b, stderrReader); err != nil {
-			return
-		}
+		_, _ = io.Copy(&b, stderrReader)
 		stderr = b.String()
 	}()
 
-	err = execute(args, version)
+	err = f()
 	stderrWriter.Close()
-	stderrReader.Close()
+	stdoutWriter.Close()
 	wg.Wait()
 	return
 
