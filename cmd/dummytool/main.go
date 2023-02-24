@@ -13,17 +13,17 @@ import (
 var version string
 
 func main() {
-	if err := rootCmd(os.Args, version); err != nil {
+	if err := execRootCmd(os.Args, version); err != nil {
 		os.Exit(1)
 	}
 }
 
-func rootCmd(args []string, ver string) error {
+func execRootCmd(args []string, ver string) error {
 	version = ver
-	return cobrau.PrepareAndExecuteRootCmd(
+	return cobrau.PrepareRootCmd(
 		"ctool",
 		"Cluster management utility",
 		args,
 		newDeployCmd(), newUpgradeCmd(),
-	)
+	).Execute()
 }

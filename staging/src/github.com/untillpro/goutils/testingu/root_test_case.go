@@ -24,9 +24,10 @@ type RootTestCase struct {
 }
 
 func RunRootTestCases(t *testing.T, execute func(args []string, version string) error, testCases []RootTestCase) {
+	t.Helper()
 	for _, tc := range testCases {
 		t.Run(tc.Name, func(t *testing.T) {
-
+			t.Helper()
 			f := func() error {
 				return execute(tc.Args, tc.Version)
 			}
@@ -39,18 +40,22 @@ func RunRootTestCases(t *testing.T, execute func(args []string, version string) 
 }
 
 func checkError(t *testing.T, expectedErr error, expectedErrPattern string, actualErr error) {
+	t.Helper()
 	if expectedErr != nil || len(expectedErrPattern) > 0 {
 		if actualErr == nil {
 			t.Errorf("error was not returned as expected")
+			return
 		}
 		if expectedErr != nil && !errors.Is(actualErr, expectedErr) {
 			t.Errorf("wrong error was returned: expected `%v`, got `%v`", expectedErr, actualErr)
+			return
 		}
 		if len(expectedErrPattern) > 0 && !strings.Contains(actualErr.Error(), expectedErrPattern) {
 			t.Errorf("wrong error was returned: expected pattern `%v`, got `%v`", expectedErrPattern, actualErr.Error())
+			return
 		}
 	} else if actualErr != nil {
-		t.Errorf("error was returned: %v", actualErr)
+		t.Errorf("unexpected error was returned: %v", actualErr)
 	}
 }
 

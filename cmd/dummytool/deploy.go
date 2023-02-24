@@ -16,6 +16,7 @@ func newDeployCmd() *cobra.Command {
 		Short: "Deploy an SE cluster using the specified nodes",
 		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			logger.Verbose("Deploying SE")
 			var errArgs error
 			for idx, arg := range args {
 				domain, ip, ok := validateNodeAddr(arg)
@@ -29,7 +30,7 @@ func newDeployCmd() *cobra.Command {
 			if errArgs != nil {
 				return errArgs
 			}
-			// TODO: Implement the deploy functionality using appCompose and dbCompose
+			// TODO: Implement the deploy SE functionality
 			return nil
 		},
 	}
@@ -37,7 +38,8 @@ func newDeployCmd() *cobra.Command {
 		Use:   "CE [<ipaddr>]",
 		Short: "Deploy CE on the specified node",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			logger.Info("Deploying CE")
+			logger.Verbose("Deploying CE")
+			// TODO: Implement the deploy CE functionality
 			return nil
 		},
 	}
@@ -63,22 +65,10 @@ func validateNodeAddr(nodeAddr string) (domain string, ip net.IP, valid bool) {
 		if ip == nil {
 			return "", nil, false
 		}
-		addrs, err := net.LookupHost(domain)
-		if err != nil {
-			return "", nil, false
-		}
-		for _, addr := range addrs {
-			if addr == ip.String() {
-				return domain, ip, true
-			}
-		}
-		return "", nil, false
+		return
 	}
 
 	ip = net.ParseIP(nodeAddr)
-	if ip != nil {
-		return "", ip, true
-	}
-
-	return "", nil, false
+	valid = ip != nil
+	return
 }

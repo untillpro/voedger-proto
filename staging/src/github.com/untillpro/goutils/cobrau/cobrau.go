@@ -19,7 +19,7 @@ Persistent flags:
 
 */
 
-func PrepareAndExecuteRootCmd(use string, short string, args []string, cmds ...*cobra.Command) error {
+func PrepareRootCmd(use string, short string, args []string, cmds ...*cobra.Command) *cobra.Command {
 
 	var rootCmd = &cobra.Command{
 		Use:   use,
@@ -40,5 +40,5 @@ func PrepareAndExecuteRootCmd(use string, short string, args []string, cmds ...*
 	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "Print verbose output")
 	rootCmd.PersistentFlags().BoolP("trace", "", false, "Print trace output")
 	rootCmd.SilenceUsage = true
-	return rootCmd.Execute()
+	return rootCmd
 }
