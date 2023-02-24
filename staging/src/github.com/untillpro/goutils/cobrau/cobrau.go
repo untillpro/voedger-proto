@@ -37,8 +37,8 @@ func PrepareRootCmd(use string, short string, args []string, cmds ...*cobra.Comm
 
 	rootCmd.SetArgs(args[1:])
 	rootCmd.AddCommand(cmds...)
-	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "Print verbose output")
-	rootCmd.PersistentFlags().BoolP("trace", "", false, "Print trace output")
+	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "Verbose output")
+	rootCmd.PersistentFlags().Bool("trace", false, "Extremely verbose output")
 	rootCmd.SilenceUsage = true
 	return rootCmd
 }

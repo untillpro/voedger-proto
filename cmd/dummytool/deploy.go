@@ -39,6 +39,9 @@ func newDeployCmd() *cobra.Command {
 		Short: "Deploy CE on the specified node",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			logger.Verbose("Deploying CE")
+			dryRun, _ := cmd.Root().PersistentFlags().GetBool("dry-run")
+			logger.Verbose("dry-run:", dryRun)
+
 			// TODO: Implement the deploy CE functionality
 			return nil
 		},
