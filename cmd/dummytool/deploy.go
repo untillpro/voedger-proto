@@ -11,27 +11,44 @@ import (
 )
 
 func newDeployCmd() *cobra.Command {
-	return &cobra.Command{
-		Use:   "deploy [[<domain>:]<ipaddr>...]",
-		Short: "Deploys a cluster using specified nodes",
+	deploySECmd := &cobra.Command{
+		Use:   "SE [[<domain>:]<ipaddr>...]",
+		Short: "Deploy an SE cluster using the specified nodes",
 		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var errArgs error
 			for idx, arg := range args {
 				domain, ip, ok := validateNodeAddr(arg)
 				if !ok {
-					errArgs = errors.Join(errArgs, fmt.Errorf("%w: actual argument #%v: %v", ErrDeployInvalidArg, idx, arg))
+					errArgs = errors.Join(errArgs, fmt.Errorf("%w: actual argument #%v: %v", ErrDeployInvalidArg, idx+1, arg))
 				}
-				logger.Verbose("domain, ip", domain, ip)
+				if logger.IsVerbose() { // you might skip this check if perfomance is not your goal
+					logger.Verbose("domain, ip", domain, ip)
+				}
 			}
 			if errArgs != nil {
 				return errArgs
 			}
 			// TODO: Implement the deploy functionality using appCompose and dbCompose
 			return nil
-
 		},
 	}
+	deployCECmd := &cobra.Command{
+		Use:   "CE [<ipaddr>]",
+		Short: "Deploy CE on the specified node",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			logger.Info("Deploying CE")
+			return nil
+		},
+	}
+
+	deployCmd := &cobra.Command{
+		Use:   "deploy",
+		Short: "Deploy CE or SE cluster",
+	}
+	deployCmd.AddCommand(deployCECmd, deploySECmd)
+
+	return deployCmd
 }
 
 func validateNodeAddr(nodeAddr string) (domain string, ip net.IP, valid bool) {
