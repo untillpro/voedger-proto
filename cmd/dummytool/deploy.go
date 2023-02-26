@@ -20,7 +20,7 @@ func newDeployCmd() *cobra.Command {
 		Short: "Deploy an SE cluster using the specified nodes",
 		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			logger.Verbose("Deploying SE")
+			logger.Verbose("deploying SE")
 			var errArgs error
 			for idx, arg := range args {
 				domain, ip, ok := mynet.ValidateNodeAddr(arg)
@@ -34,7 +34,12 @@ func newDeployCmd() *cobra.Command {
 			if errArgs != nil {
 				return errArgs
 			}
-			// TODO: Implement the deploy SE functionality
+			dryRun, _ := cmd.Root().PersistentFlags().GetBool("dry-run")
+			if dryRun {
+				logger.Verbose("I'm in dry-run mode")
+				return nil
+			}
+			logger.Verbose("normal mode")
 			return nil
 		},
 	}
@@ -43,10 +48,13 @@ func newDeployCmd() *cobra.Command {
 		Short: "Deploy CE on the specified node",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			logger.Verbose("Deploying CE")
-			dryRun, _ := cmd.Root().PersistentFlags().GetBool("dry-run")
-			logger.Verbose("dry-run:", dryRun)
 
-			// TODO: Implement the deploy CE functionality
+			dryRun, _ := cmd.Root().PersistentFlags().GetBool("dry-run")
+			if dryRun {
+				logger.Verbose("I'm in dry-run mode")
+				return nil
+			}
+			logger.Verbose("normal mode")
 			return nil
 		},
 	}

@@ -19,7 +19,7 @@ func TestBasicUsage_Deploy(t *testing.T) {
 			Args:               []string{"dummyutil", "deploy", "SE", "1.0.0.1"},
 			Version:            "0.0.0-dummy",
 			ExpectedErr:        nil,
-			ExpectedErrPattern: "5 arg",
+			ExpectedErrPattern: "5 arg(s)",
 		},
 		{
 			Name:               "Invalid argument",

@@ -8,8 +8,10 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/spf13/cobra"
+	"github.com/untillpro/goutils/logger"
 )
 
 func newUpgradeCmd() *cobra.Command {
@@ -21,7 +23,14 @@ func newUpgradeCmd() *cobra.Command {
 				fmt.Println("Error: upgrade command does not take any arguments")
 				os.Exit(1)
 			}
-			// TODO: Implement the upgrade functionality
+			for cmd.Context().Err() == nil {
+				fmt.Println("Hello, world, I'm doing upgrade!")
+				time.Sleep(time.Second)
+			}
+			if cmd.Context().Err() != nil {
+				logger.Verbose("upgrade command is interrupted")
+			}
+
 		},
 	}
 }
