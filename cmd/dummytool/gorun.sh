@@ -1,0 +1,1 @@
+go run `find  -maxdepth 1 -type f -name '*.go' | grep -v '_test.go$'` $*

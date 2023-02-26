@@ -1,0 +1,8 @@
+go 1.19
+
+use (
+	./
+	./staging/src/github.com/untillpro/goutils
+    ./staging/src/voedger.io/istoragecas
+
+)
