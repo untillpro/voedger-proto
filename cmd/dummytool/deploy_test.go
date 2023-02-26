@@ -1,3 +1,8 @@
+/*
+* Copyright (c) 2023-present unTill Pro, Ltd.
+* @author Maxim Geraskin
+ */
+
 package main
 
 import (
@@ -22,6 +27,13 @@ func TestBasicUsage_Deploy(t *testing.T) {
 			Version:            "0.0.0-dummy",
 			ExpectedErr:        ErrDeployInvalidArg,
 			ExpectedErrPattern: "invalid argument",
+		},
+		{
+			Name:               "Good args, dry-run",
+			Args:               []string{"dummyutil", "deploy", "SE", "--dry-run", "1.1.1.1", "1.1.1.2", "1.1.1.3", "1.1.1.4", "1.1.1.5"},
+			Version:            "0.0.0-dummy",
+			ExpectedErr:        nil,
+			ExpectedErrPattern: "",
 		},
 	}
 

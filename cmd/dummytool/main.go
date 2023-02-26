@@ -1,3 +1,8 @@
+/*
+* Copyright (c) 2023-present unTill Pro, Ltd.
+* @author Maxim Geraskin
+ */
+
 package main
 
 import (
@@ -20,10 +25,16 @@ func main() {
 
 func execRootCmd(args []string, ver string) error {
 	version = ver
-	return cobrau.PrepareRootCmd(
+
+	rootCmd := cobrau.PrepareRootCmd(
 		"ctool",
 		"Cluster management utility",
 		args,
 		newDeployCmd(), newUpgradeCmd(),
-	).Execute()
+	)
+
+	// Can be got as cmd.Root().PersistentFlags().GetBool("dry-run")
+	rootCmd.PersistentFlags().Bool("dry-run", false, "Simulate the execution of the command without actually modifying any files or data")
+
+	return rootCmd.Execute()
 }
