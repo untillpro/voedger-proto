@@ -36,7 +36,7 @@ func execRootCmd(args []string, ver string) error {
 	// Can be got as cmd.Root().PersistentFlags().GetBool("dry-run")
 	rootCmd.PersistentFlags().Bool("dry-run", false, "Simulate the execution of the command without actually modifying any files or data")
 
-	// Can just use `return rootCmd.Execute()``
+	// Can just use `return rootCmd.Execute()`
 	return cobrau.ExecCommandAndCatchInterrupt(rootCmd)
 
 }
