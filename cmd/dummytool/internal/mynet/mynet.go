@@ -7,8 +7,8 @@ import (
 
 func ValidateNodeAddr(nodeAddr string) (domain string, ip net.IP, valid bool) {
 
-	if strings.Contains(nodeAddr, ":") {
-		parts := strings.Split(nodeAddr, ":")
+	if strings.Contains(nodeAddr, "/") {
+		parts := strings.Split(nodeAddr, "/")
 		if len(parts) != 2 {
 			return "", nil, false
 		}

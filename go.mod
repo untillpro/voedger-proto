@@ -7,6 +7,7 @@ require (
 	github.com/heeus/core-logger v0.0.0-20230208104058-9f68e6eb1ca8
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1
+	github.com/untillpro/goutils v0.0.0-20230226154000-87deeb356c5c
 )
 
 require (
