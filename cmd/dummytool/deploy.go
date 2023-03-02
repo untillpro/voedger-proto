@@ -34,9 +34,9 @@ func newDeployCmd() *cobra.Command {
 			if errArgs != nil {
 				return errArgs
 			}
-			dryRun, _ := cmd.Root().PersistentFlags().GetBool("dry-run")
+			dryRun, _ := cmd.Root().PersistentFlags().GetBool(DryRunFlag)
 			if dryRun {
-				logger.Verbose("I'm in dry-run mode")
+				logger.Info("I'm in dry-run mode, doing nothing")
 				return nil
 			}
 			logger.Verbose("normal mode")
@@ -51,7 +51,7 @@ func newDeployCmd() *cobra.Command {
 
 			dryRun, _ := cmd.Root().PersistentFlags().GetBool("dry-run")
 			if dryRun {
-				logger.Verbose("I'm in dry-run mode")
+				logger.Info("I'm in dry-run mode, doing nothing")
 				return nil
 			}
 			logger.Verbose("normal mode")

@@ -16,19 +16,19 @@ import (
 
 func ExecCommandAndCatchInterrupt(cmd *cobra.Command) error {
 
-	done := make(chan struct{})
+	ctxDone, cancel := context.WithCancel(context.Background())
 
 	cmdExec := func(ctx context.Context) (err error) {
 		err = cmd.ExecuteContext(ctx)
-		done <- struct{}{}
+		cancel()
 		return
 	}
 
-	return goAndCatchInterrupt(cmdExec, done)
+	return goAndCatchInterrupt(cmdExec, ctxDone)
 
 }
 
-func goAndCatchInterrupt(f func(ctx context.Context) error, done chan struct{}) (err error) {
+func goAndCatchInterrupt(f func(ctx context.Context) error, ctxDone context.Context) (err error) {
 
 	var signals = make(chan os.Signal, 1)
 
@@ -39,19 +39,17 @@ func goAndCatchInterrupt(f func(ctx context.Context) error, done chan struct{}) 
 		err = f(ctx)
 	}()
 
-infinitcycle:
-	for {
+	for ctxDone.Err() == nil {
 		select {
 		case sig := <-signals:
 			if ctx.Err() == nil {
 				logger.Verbose("signal received:", sig)
 				cancel()
 			}
-		case <-done:
-			logger.Verbose("item received from `done` channel")
-			cancel()
-			break infinitcycle
+		case <-ctxDone.Done():
+			logger.Verbose("ctxDone closed")
 		}
 	}
+	cancel()
 	return
 }
