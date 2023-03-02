@@ -23,8 +23,8 @@ func newUpgradeCmd() *cobra.Command {
 				fmt.Println("Error: upgrade command does not take any arguments")
 				os.Exit(1)
 			}
-			for cmd.Context().Err() == nil {
-				fmt.Println("Hello, world, I'm doing upgrade!")
+			for i := 0; i < 10 && cmd.Context().Err() == nil; i++ {
+				fmt.Println("Hello, world, I'm doing upgrade:", i, "!")
 				time.Sleep(time.Second)
 			}
 			if cmd.Context().Err() != nil {

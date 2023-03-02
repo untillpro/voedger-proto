@@ -9,6 +9,7 @@ import (
 	"context"
 	"os"
 	"os/signal"
+	"sync"
 
 	"github.com/spf13/cobra"
 	"github.com/untillpro/goutils/logger"
@@ -16,40 +17,37 @@ import (
 
 func ExecCommandAndCatchInterrupt(cmd *cobra.Command) error {
 
-	ctxDone, cancel := context.WithCancel(context.Background())
-
 	cmdExec := func(ctx context.Context) (err error) {
 		err = cmd.ExecuteContext(ctx)
-		cancel()
 		return
 	}
 
-	return goAndCatchInterrupt(cmdExec, ctxDone)
+	return goAndCatchInterrupt(cmdExec)
 
 }
 
-func goAndCatchInterrupt(f func(ctx context.Context) error, ctxDone context.Context) (err error) {
+func goAndCatchInterrupt(f func(ctx context.Context) error) (err error) {
 
 	var signals = make(chan os.Signal, 1)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	signal.Notify(signals, os.Interrupt)
 
+	wg := sync.WaitGroup{}
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		err = f(ctx)
+		cancel()
 	}()
 
-	for ctxDone.Err() == nil {
-		select {
-		case sig := <-signals:
-			if ctx.Err() == nil {
-				logger.Verbose("signal received:", sig)
-				cancel()
-			}
-		case <-ctxDone.Done():
-			logger.Verbose("ctxDone closed")
-		}
+	select {
+	case sig := <-signals:
+		logger.Info("signal received:", sig)
+		cancel()
+	case <-ctx.Done():
 	}
-	cancel()
-	return
+	logger.Verbose("waiting for function to finish...")
+	wg.Wait()
+	return err
 }
