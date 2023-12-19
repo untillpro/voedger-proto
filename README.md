@@ -42,8 +42,8 @@
 
 - Example: [cobrau](staging/src/github.com/untillpro/goutils/cobrau)
 - Interface and Implementation files // if library provides interface and implementation
-- <package-name>.go // if library is simple
-- <logical_subpackage1>.go, <logical_subpackage2>.go... // if library is complex
+- `<package-name>.go` // if library is simple
+- `<logical_subpackage1>.go`, `<logical_subpackage2>.go`... // if library is complex
 
 
 ## Package Structure: CLI Tool
