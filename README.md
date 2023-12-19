@@ -13,7 +13,7 @@
 
 - errors.go, consts.go
 - utils.go // Helpers and potential candidates for goutils module
-- stringer_[type1].go, stringer_[type2].go // stringers output
+- [lowered_type1]_string.go, [lowered_type2]_string.go // stringers output
 - internal // folder
 
 ## Interface package
